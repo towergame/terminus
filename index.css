@@ -160,12 +160,13 @@ body {
 	width: 100%;
 }
 a:link {
-    color:blue;
-    text-shadow: blue 0 0 10px;
+    color:black;
+    text-shadow: black 0 0 10px;
 }
 a:visited {
-    color: green;
-    text-shadow: green 0 0 10px;
+	color: white;
+	font: bold;
+    text-shadow: white 0 0 10px;
 }
 
 ::selection {

@@ -153,14 +153,6 @@ body {
 	font: bold;
 	animation: anim2 10s infinite;
 }
-#unlock {
-	background-color: black;
-	border: black 4px;
-	color: white;
-	box-shadow: black 0 0 10px;
-	height: 6%;
-	width: 12%;
-}
 #clear {
 	background-color: black;
 	border: black 4px;
@@ -172,17 +164,21 @@ body {
 	border: solid white 4px;
 	color: black;
 	box-shadow: white 0 0 10px;
-	height: 6%;
+	height: 8vh;
 	width: 12%;
-	margin: 5pt;
+	margin: 10pt;
+	align-self: center;
 }
 .shopItem:disabled {
 	background-color: white;
 	border: solid greenyellow 4px;
 	color: black;
 	box-shadow: white 0 0 10px;
-	height: 6%;
+	height: 8vh;
 	width: 12%;
+}
+#unlocked div {
+	height: 10%;
 }
 .up {
     position: absolute;

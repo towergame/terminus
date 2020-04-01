@@ -39,7 +39,10 @@
 				<button id="unlock">Reverse Entropy(3 Entropic Power).</button>
 			</div>
 			<div id="unlocked" hidden>
-				<button id="mult" class="shopItem">Multiplier based on purchased Generators(5 Entropic Power).</button>
+				<button id="mult" class="shopItem">Production multiplier based on purchased Generators(5 Entropic
+					Power).</button>
+				<button id="exMult" class="shopItem">Production multiplier based on total Entropy Generators(8 Entropic
+					Power).</button>
 			</div>
 		</div>
 		<br />
@@ -61,7 +64,8 @@
 			power;
 			pendingPower;
 			mult;
-			constructor(bit, totbit, gen, genc, rec, recc, pow, ppow, mult, shop, purchasedGen) {
+			exMult;
+			constructor(bit, totbit, gen, genc, rec, recc, pow, ppow, mult, shop, purchasedGen, exMult) {
 				this.bits = bit;
 				this.totBits = totbit;
 				this.generation = gen;
@@ -73,6 +77,7 @@
 				this.mult = mult;
 				this.shop = shop;
 				this.purchasedGen = purchasedGen;
+				this.exMult = exMult;
 			}
 		}
 		let bits = 0;
@@ -85,26 +90,43 @@
 		let pendingPower = 0;
 		let mult = false;
 		let shop = false;
+		let exMult = false;
 		let purchasedGen = 0;
 		function click() {
 			bits++;
 			totBits++;
 		}
 		function update() {
-			let x = new Game(bits, totBits, generation, genCost, recursor, recurCost, power, pendingPower, mult, shop, purchasedGen);
+			let x = new Game(bits, totBits, generation, genCost, recursor, recurCost, power, pendingPower, mult, shop, purchasedGen, exMult);
 			document.cookie = "gam=" + JSON.stringify(x) + ";";
 			if (mult)
 				generation += 0.05 * recursor * recursor;
 			else
 				generation += 0.05 * recursor;
-			if (mult)
-				bits += 0.05 * generation * purchasedGen;
-			else
-				bits += 0.05 * generation;
-			if (mult)
-				totBits += 0.05 * generation * purchasedGen;
-			else
-				totBits += 0.05 * generation;
+			let loge = 1;
+			if (mult) {
+				if (exMult) {
+					if (Math.log(generation) != -Infinity) {
+						loge = Math.log(generation) + 1;
+					}
+					bits += 0.05 * generation * purchasedGen * loge;
+					totBits += 0.05 * generation * purchasedGen * loge;
+				} else {
+					bits += 0.05 * generation * purchasedGen;
+					totBits += 0.05 * generation * purchasedGen;
+				}
+			} else {
+				if (exMult) {
+					if (Math.log(generation) != -Infinity) {
+						loge = Math.log(generation) + 1;
+					}
+					bits += 0.05 * generation * Math.log(generation);
+					totBits += 0.05 * generation * Math.log(generation);
+				} else {
+					bits += 0.05 * generation;
+					totBits += 0.05 * generation;
+				}
+			}
 			pendingPower = Math.log(totBits / (Math.pow(10, power + 2)));
 			if (pendingPower < 0)
 				pendingPower = 0;
@@ -168,6 +190,14 @@
 			mult = true;
 			document.getElementById("mult").disabled = true;
 		}
+		function addMultEx() {
+			if (power - 1 < 8) {
+				return;
+			}
+			power -= 8;
+			exMult = true;
+			document.getElementById("exMult").disabled = true;
+		}
 		function delSave() {
 			let ans = confirm("Are you sure you want to delete your entire save?");
 			if (ans) {
@@ -181,8 +211,16 @@
 				pendingPower = 0;
 				mult = false;
 				shop = false;
+				exMult = false;
 				purchasedGen = 0;
 				document.cookie = "gam=;";
+				document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
+				document.getElementById("num").innerHTML = Math.floor(bits);
+				document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
+				document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
+				document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";
+				document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
+				document.getElementById("keybd").innerHTML = "Entropy Generator(" + generation + ")";
 			}
 		}
 		let x = setInterval(update, 20)
@@ -193,6 +231,7 @@
 		document.getElementById("unlock").onclick = unlock;
 		document.getElementById("mult").onclick = addMult;
 		document.getElementById("clear").onclick = delSave;
+		document.getElementById("exMult").onclick = addMultEx;
 		if (document.cookie.includes("gam")) {
 			let s = document.cookie;
 			let c = s.substr(4, s.length - 1);
@@ -208,6 +247,7 @@
 			mult = y.mult;
 			shop = y.shop;
 			purchasedGen = y.purchasedGen;
+			exMult = y.exMult;
 			document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
 			document.getElementById("num").innerHTML = Math.floor(bits);
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
@@ -221,6 +261,9 @@
 			}
 			if (mult) {
 				document.getElementById("mult").disabled = true;
+			}
+			if (exMult) {
+				document.getElementById("exMult").disabled = true;
 			}
 		}
 	</script>

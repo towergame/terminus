@@ -43,6 +43,9 @@
 					Power).</button>
 				<button id="exMult" class="shopItem">Production multiplier based on total Entropy Generators(8 Entropic
 					Power).</button>
+				<br />
+				<button id="entPow" class="shopItem">Production multiplier based on Entropic Power(10 Entropic
+					Power).</button>
 			</div>
 		</div>
 		<br />
@@ -65,7 +68,8 @@
 			pendingPower;
 			mult;
 			exMult;
-			constructor(bit, totbit, gen, genc, rec, recc, pow, ppow, mult, shop, purchasedGen, exMult) {
+			entPow;
+			constructor(bit, totbit, gen, genc, rec, recc, pow, ppow, mult, shop, purchasedGen, exMult, entPow) {
 				this.bits = bit;
 				this.totBits = totbit;
 				this.generation = gen;
@@ -78,6 +82,7 @@
 				this.shop = shop;
 				this.purchasedGen = purchasedGen;
 				this.exMult = exMult;
+				this.entPow = entPow;
 			}
 		}
 		let bits = 0;
@@ -92,46 +97,38 @@
 		let shop = false;
 		let exMult = false;
 		let purchasedGen = 0;
+		let entPow = false;
 		function click() {
 			bits++;
 			totBits++;
 		}
 		function update() {
-			let x = new Game(bits, totBits, generation, genCost, recursor, recurCost, power, pendingPower, mult, shop, purchasedGen, exMult);
+			let x = new Game(bits, totBits, generation, genCost, recursor, recurCost, power, pendingPower, mult, shop, purchasedGen, exMult, entPow);
 			document.cookie = "gam=" + JSON.stringify(x) + ";";
 			if (mult)
 				generation += 0.05 * recursor * recursor;
 			else
 				generation += 0.05 * recursor;
 			let loge = 1;
-			if (mult) {
-				if (exMult) {
-					if (Math.log(generation) != -Infinity) {
-						loge = Math.log(generation) + 1;
-					}
-					bits += 0.05 * generation * purchasedGen * loge;
-					totBits += 0.05 * generation * purchasedGen * loge;
-				} else {
-					bits += 0.05 * generation * purchasedGen;
-					totBits += 0.05 * generation * purchasedGen;
-				}
-			} else {
-				if (exMult) {
-					if (Math.log(generation) != -Infinity) {
-						loge = Math.log(generation) + 1;
-					}
-					bits += 0.05 * generation * Math.log(generation);
-					totBits += 0.05 * generation * Math.log(generation);
-				} else {
-					bits += 0.05 * generation;
-					totBits += 0.05 * generation;
-				}
+			let add = generation * 0.05;
+			if (mult)
+				add *= purchasedGen;
+			if (exMult) {
+				if (Math.log(generation) != -Infinity)
+					add *= Math.log(generation) + 1;
 			}
+			if (entPow)
+				add *= Math.exp(power);
+			bits += add;
+			totBits += add;
 			pendingPower = Math.log(totBits / (Math.pow(10, power + 2)));
 			if (pendingPower < 0)
 				pendingPower = 0;
 			document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
-			document.getElementById("num").innerHTML = Math.floor(bits);
+			if (Math.floor(bits) / 100000 >= 1)
+				document.getElementById("num").innerHTML = Math.floor(bits).toExponential(2);
+			else
+				document.getElementById("num").innerHTML = Math.floor(bits);
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
 			document.getElementById("pow").innerHTML = "You currently have " + (power - 1) + " Entropic Power.";
 		}
@@ -198,6 +195,14 @@
 			exMult = true;
 			document.getElementById("exMult").disabled = true;
 		}
+		function addEntPow() {
+			if (power - 1 < 10) {
+				return;
+			}
+			power -= 10;
+			entPow = true;
+			document.getElementById("entPow").disabled = true;
+		}
 		function delSave() {
 			let ans = confirm("Are you sure you want to delete your entire save?");
 			if (ans) {
@@ -213,6 +218,7 @@
 				shop = false;
 				exMult = false;
 				purchasedGen = 0;
+				entPow = false;
 				document.cookie = "gam=;";
 				document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
 				document.getElementById("num").innerHTML = Math.floor(bits);
@@ -232,6 +238,7 @@
 		document.getElementById("mult").onclick = addMult;
 		document.getElementById("clear").onclick = delSave;
 		document.getElementById("exMult").onclick = addMultEx;
+		document.getElementById("entPow").onclick = addEntPow;
 		if (document.cookie.includes("gam")) {
 			let s = document.cookie;
 			let c = s.substr(4, s.length - 1);
@@ -248,6 +255,7 @@
 			shop = y.shop;
 			purchasedGen = y.purchasedGen;
 			exMult = y.exMult;
+			entPow = y.entPow;
 			document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
 			document.getElementById("num").innerHTML = Math.floor(bits);
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
@@ -264,6 +272,9 @@
 			}
 			if (exMult) {
 				document.getElementById("exMult").disabled = true;
+			}
+			if (entPow) {
+				document.getElementById("entPow").disabled = true;
 			}
 		}
 	</script>

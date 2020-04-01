@@ -169,11 +169,12 @@ body {
 }
 .shopItem {
 	background-color: white;
-	border: white 4px;
+	border: solid white 4px;
 	color: black;
 	box-shadow: white 0 0 10px;
 	height: 6%;
 	width: 12%;
+	margin: 5pt;
 }
 .shopItem:disabled {
 	background-color: white;

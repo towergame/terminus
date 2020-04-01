@@ -39,13 +39,16 @@
 				<button id="unlock">Reverse Entropy(3 Entropic Power).</button>
 			</div>
 			<div id="unlocked" hidden>
-				<button id="mult" class="shopItem">Production multiplier based on purchased Generators(5 Entropic
-					Power).</button>
-				<button id="exMult" class="shopItem">Production multiplier based on total Entropy Generators(8 Entropic
-					Power).</button>
+				<button id="mult" class="shopItem">Production multiplier based on purchased Generators(xNaN & xNaN).
+					5 Entropic Power
+				</button>
+				<button id="exMult" class="shopItem">Production multiplier based on total Entropy Generators(xNaN).
+					8 Entropic Power</button>
 				<br />
-				<button id="entPow" class="shopItem">Production multiplier based on Entropic Power(10 Entropic
-					Power).</button>
+				<button id="entPow" class="shopItem">Production multiplier based on Entropic Power(xNaN).
+					10 Entropic Power</button>
+				<button id="scalePow" class="shopItem">Increase the effect Entropic Power has on scaling.
+					15 Entropic Power</button>
 			</div>
 		</div>
 		<br />
@@ -69,7 +72,8 @@
 			mult;
 			exMult;
 			entPow;
-			constructor(bit, totbit, gen, genc, rec, recc, pow, ppow, mult, shop, purchasedGen, exMult, entPow) {
+			scalePow;
+			constructor(bit, totbit, gen, genc, rec, recc, pow, ppow, mult, shop, purchasedGen, exMult, entPow, scalePow) {
 				this.bits = bit;
 				this.totBits = totbit;
 				this.generation = gen;
@@ -83,6 +87,7 @@
 				this.purchasedGen = purchasedGen;
 				this.exMult = exMult;
 				this.entPow = entPow;
+				this.scalePow = scalePow;
 			}
 		}
 		let bits = 0;
@@ -98,12 +103,13 @@
 		let exMult = false;
 		let purchasedGen = 0;
 		let entPow = false;
+		let scalePow = false;
 		function click() {
 			bits++;
 			totBits++;
 		}
 		function update() {
-			let x = new Game(bits, totBits, generation, genCost, recursor, recurCost, power, pendingPower, mult, shop, purchasedGen, exMult, entPow);
+			let x = new Game(bits, totBits, generation, genCost, recursor, recurCost, power, pendingPower, mult, shop, purchasedGen, exMult, entPow, scalePow);
 			document.cookie = "gam=" + JSON.stringify(x) + ";";
 			if (mult)
 				generation += 0.05 * recursor * recursor;
@@ -131,6 +137,9 @@
 				document.getElementById("num").innerHTML = Math.floor(bits);
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
 			document.getElementById("pow").innerHTML = "You currently have " + (power - 1) + " Entropic Power.";
+			document.getElementById("mult").textContent = "Production multiplier based on purchased Generators(x" + purchasedGen + "& x" + recursor + "). 5 Entropic Power";
+			document.getElementById("exMult").textContent = "Production multiplier based on total Entropy Generators(x" + (Math.log(generation) + 1) + "). 8 Entropic Power";
+			document.getElementById("entPow").textContent = "Production multiplier based on Entropic Power(x" + Math.exp(power).toExponential(2) + "). 10 Entropic Power";
 		}
 		function buyKeyb() {
 			if (bits < genCost) {
@@ -140,7 +149,12 @@
 			purchasedGen++;
 			bits -= genCost;
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + generation + ")";
-			genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() * ((genCost * Math.log(totBits + 1)) / Math.pow(10, power) + Math.sqrt(1))))));
+			if (scalePow) {
+				let rem = bits - power * power > 0 ? power : bits;
+				genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() * ((genCost * Math.log(totBits - rem + 1)) / Math.pow(10, power) + Math.sqrt(1))))));
+			} else {
+				genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() * ((genCost * Math.log(totBits + 1)) / Math.pow(10, power) + Math.sqrt(1))))));
+			}
 			document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
 		}
 		function buyRecurb() {
@@ -149,7 +163,12 @@
 			}
 			recursor += 1;
 			bits -= recurCost;
-			recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() * ((recurCost * Math.log(totBits + 1)) / Math.pow(10, power) + Math.sqrt(1))))));
+			if (scalePow) {
+				let rem = bits - power * power > 0 ? power : bits;
+				recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() * ((recurCost * Math.log(totBits - rem + 1)) / Math.pow(10, power) + Math.sqrt(1))))));
+			} else {
+				recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() * ((recurCost * Math.log(totBits + 1)) / Math.pow(10, power) + Math.sqrt(1))))));
+			}
 			document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
 			document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";
 		}
@@ -203,6 +222,14 @@
 			entPow = true;
 			document.getElementById("entPow").disabled = true;
 		}
+		function addScalePow() {
+			if (power - 1 < 15) {
+				return;
+			}
+			power -= 15;
+			scalePow = true;
+			document.getElementById("scalePow").disabled = true;
+		}
 		function delSave() {
 			let ans = confirm("Are you sure you want to delete your entire save?");
 			if (ans) {
@@ -219,6 +246,7 @@
 				exMult = false;
 				purchasedGen = 0;
 				entPow = false;
+				scalePow = false;
 				document.cookie = "gam=;";
 				document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
 				document.getElementById("num").innerHTML = Math.floor(bits);
@@ -239,6 +267,7 @@
 		document.getElementById("clear").onclick = delSave;
 		document.getElementById("exMult").onclick = addMultEx;
 		document.getElementById("entPow").onclick = addEntPow;
+		document.getElementById("scalePow").onclick = addScalePow;
 		if (document.cookie.includes("gam")) {
 			let s = document.cookie;
 			let c = s.substr(4, s.length - 1);
@@ -256,6 +285,7 @@
 			purchasedGen = y.purchasedGen;
 			exMult = y.exMult;
 			entPow = y.entPow;
+			scalePow = y.scalePow;
 			document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
 			document.getElementById("num").innerHTML = Math.floor(bits);
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
@@ -274,6 +304,9 @@
 				document.getElementById("exMult").disabled = true;
 			}
 			if (entPow) {
+				document.getElementById("entPow").disabled = true;
+			}
+			if (scalePow) {
 				document.getElementById("entPow").disabled = true;
 			}
 		}

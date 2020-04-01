@@ -161,6 +161,12 @@ body {
 	height: 6%;
 	width: 12%;
 }
+#clear {
+	background-color: black;
+	border: black 4px;
+	color: white;
+	box-shadow: black 0 0 10px;
+}
 .shopItem {
 	background-color: white;
 	border: white 4px;
@@ -198,4 +204,11 @@ a:visited {
     color: black;
     text-shadow: black 0 0 10px;
     background: rgba(0, 255, 0, 0.8);
+}
+
+.tutorol {
+	position: relative;
+	text-align: center;
+	font-size: 12pt;
+	margin-top: 3%;
 }

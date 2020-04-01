@@ -1,0 +1,175 @@
+body {
+    color: #FF00DD;
+    text-shadow: #00DDFF 0 0 25px;
+    overflow: hidden;
+}
+.bg {
+	/*background: radial-gradient(rgb(0, 122, 0), black);*/
+	background: linear-gradient(#00DDFF, #FF00DD);
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+}
+@keyframes pulse {
+    0%   {transform: scale(1.001);  opacity: .14; }
+    8%   {transform: scale(1.000);  opacity: .13; }
+    15%  {transform: scale(1.004);  opacity: .14; }
+    30%  {transform: scale(1.002);  opacity: .11; }
+    100% {transform: scale(1.000);  opacity: .14; }
+}
+@keyframes vline {
+    0%   { top: 0px;}
+    100% { top: 100%;}
+  }
+.down {
+    z-index: 4010;
+    background: linear-gradient(#444 50%, #000 50%);
+    background-size: 100% 4px;
+    background-repeat: repeat-y;
+    opacity: .14;
+    box-shadow : inset 0px 0px 1px 1px rgba(0, 0, 0, .8);
+    animation: pulse 5s linear infinite;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+.up {
+    z-index: 5000;
+    position: absolute;
+    background: none;
+    left: 0;
+    top: 0;
+    width: 100vw;
+}
+.overlay {
+    content : '';
+    position : absolute;
+    left: 0;
+    top : 0px;
+    width : 100%;
+    height : 5px;
+    background : #fff;
+    background: linear-gradient(to bottom, rgba(255,0,0,0) 0%,rgba(255,250,250,1) 50%,rgba(255,255,255,0.98) 51%,rgba(255,0,0,0) 100%); /* W3C */
+    opacity : .1;
+    animation: vline 15s linear infinite;
+    z-index: 4011;
+  }
+.term-text {
+    font-family: monospace;
+    color:black;
+    text-shadow: black 0 0 10px;
+}
+#num {
+	position: relative;
+	text-align: center;
+	font-size: 72pt;
+}
+#sub {
+	position: relative;
+	text-align: center;
+	font-size: 36pt;
+}
+#generateDiv {
+	text-align: center;
+	font-size: 36pt;
+}
+#generate {
+	background-color: #FF00DD;
+	border: outset #FF00DD 4px;
+	height: 6%;
+	width: 12%;
+}
+#pow {
+	text-align: center;
+}
+#generatorDiv {
+	font-size: 16pt;
+}
+#keyb {
+	background-color: #FF00DD;
+	border: outset #FF00DD 4px;
+}
+#recurb {
+	background-color: #FF00DD;
+	border: outset #FF00DD 4px;
+}
+@keyframes anim {
+	0% {
+		background-color: red;
+		border: outset red 4px;
+	} 
+	14% {
+		background-color: orange;
+		border: outset orange 4px;
+	}
+	28% {
+		background-color: yellow;
+		border: outset yellow 4px;
+	}
+	42% {
+		background-color: greenyellow;
+		border: outset greenyellow 4px;
+	}
+	56% {
+		background-color: turquoise;
+		border: outset turquoise 4px;
+	}
+	70% {
+		background-color: blue;
+		border: outset blue 4px;
+	}
+	84% {
+		background-color: purple;
+		border: outset purple 4px;
+	}
+	100% {
+		background-color: red;
+		border: outset red 4px;
+	}
+}
+#powerb {
+	width: 6%;
+	height: 3%;
+	animation: anim 10s infinite;
+	margin-left: 15%;
+}
+@keyframes anim2 {
+	0% {
+		color: #00DDFF;
+	}
+	50% {
+		color: #FF00DD;
+	}
+	100% {
+		color: #00DDFF;
+	}
+}
+#pendPowNum {
+	font: bold;
+	animation: anim2 10s infinite;
+}
+.up {
+    position: absolute;
+    top:0;
+	left:0;
+	height: 100%;
+	width: 100%;
+}
+a:link {
+    color:blue;
+    text-shadow: blue 0 0 10px;
+}
+a:visited {
+    color: green;
+    text-shadow: green 0 0 10px;
+}
+
+::selection {
+    color: black;
+    text-shadow: black 0 0 10px;
+    background: rgba(0, 255, 0, 0.8);
+}

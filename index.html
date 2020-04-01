@@ -1,0 +1,141 @@
+<html>
+
+<head>
+	<title>Terminus</title>
+	<link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<body>
+	<div class="down">
+	</div>
+	<div class="bg"></div>
+	<div class="overlay"></div>
+	<div class="up term-text">
+		<div id="num">0</div>
+		<div id="sub">bits of entropy</div>
+		<div id="pow">You currently have 0 Entropic Power.</div>
+		<br />
+		<br />
+		<br />
+		<br />
+		<div id="generateDiv"><button id="generate">Generate</button></div>
+		<br />
+		<br />
+		<br />
+		<div id="generatorDiv">
+			<span id="keybd">Entropy Generator(0)</span> <button id="keyb">Generate (1 bits)</button> <br />
+			<span id="recurd">Recursive Generator(0)</span> <button id="recurb">Generate (100 bits)</button> <br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<span>If you would empower now, you would gain <span id="pendPowNum">0</span> Entropic Power</span> <br />
+			<button id="powerb">Empower.</button>
+		</div>
+	</div>
+	<script>
+		class Game {
+			bits;
+			totBits;
+			generation;
+			genCost;
+			recursor;
+			recurCost;
+			power;
+			pendingPower;
+			constructor(bit, totbit, gen, genc, rec, recc, pow, ppow) {
+				this.bits = bit;
+				this.totBits = totbit;
+				this.generation = gen;
+				this.genCost = genc;
+				this.recursor = rec;
+				this.recurCost = recc;
+				this.power = pow;
+				this.pendingPower = ppow;
+			}
+		}
+		let bits = 0;
+		let totBits = 0;
+		let generation = 0;
+		let genCost = 1;
+		let recursor = 0;
+		let recurCost = 100;
+		let power = 1;
+		let pendingPower = 0;
+		function click() {
+			bits++;
+			totBits++;
+		}
+		function update() {
+			let x = new Game(bits, totBits, generation, genCost, recursor, recurCost, power, pendingPower);
+			document.cookie = "gam=" + JSON.stringify(x) + ";";
+			generation += 0.05 * recursor;
+			bits += 0.05 * generation;
+			totBits += 0.05 * generation;
+			pendingPower = Math.log(totBits / (Math.pow(10, power + 2)));
+			if (pendingPower < 0)
+				pendingPower = 0;
+			document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
+			document.getElementById("num").innerHTML = Math.floor(bits);
+			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
+		}
+		function buyKeyb() {
+			if (bits < genCost) {
+				return;
+			}
+			generation += 1;
+			bits -= genCost;
+			document.getElementById("keybd").innerHTML = "Entropy Generator(" + generation + ")";
+			genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() * (totBits / Math.pow(10, power)) + 1))));
+			document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
+		}
+		function buyRecurb() {
+			if (bits < recurCost) {
+				return;
+			}
+			recursor += 1;
+			bits -= recurCost;
+			recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() * (totBits / Math.pow(10, power)) + 1))));
+			document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
+			document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";
+		}
+		function empower() {
+			power += Math.floor(pendingPower);
+			pendingPower = 0;
+			document.getElementById("pow").innerHTML = "You currently have " + (power - 1) + " Entropic Power.";
+			bits = 0;
+			totBits = 0;
+			generation = 0;
+			genCost = 1;
+			recursor = 0;
+			recurCost = 100;
+			document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
+			document.getElementById("num").innerHTML = Math.floor(bits);
+			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
+			document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bit)";
+			document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";
+			document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
+			document.getElementById("keybd").innerHTML = "Entropy Generator(" + generation + ")";
+		}
+		let x = setInterval(update, 20)
+		document.getElementById("generate").onclick = click;
+		document.getElementById("keyb").onclick = buyKeyb;
+		document.getElementById("recurb").onclick = buyRecurb;
+		document.getElementById("powerb").onclick = empower;
+		if (document.cookie.includes("gam")) {
+			let s = document.cookie;
+			let c = s.substr(4, s.length - 1);
+			let y = JSON.parse(c);
+			bits = y.bits;
+			totBits = y.totBits;
+			generation = y.generation;
+			genCost = y.genCost;
+			recursor = y.recursor;
+			recurCost = y.recurCost;
+			power = y.power;
+			pendingPower = y.pendingPower;
+		}
+	</script>
+</body>
+
+</html>

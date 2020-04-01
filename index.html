@@ -45,6 +45,9 @@
 		<br />
 		<br />
 		<a href="./tutorial.html">What is this?</a>
+		<br />
+		<br />
+		<button id="clear">Delete save.</button>
 	</div>
 	<script>
 		class Game {
@@ -165,6 +168,23 @@
 			mult = true;
 			document.getElementById("mult").disabled = true;
 		}
+		function delSave() {
+			let ans = confirm("Are you sure you want to delete your entire save?");
+			if (ans) {
+				bits = 0;
+				totBits = 0;
+				generation = 0;
+				genCost = 1;
+				recursor = 0;
+				recurCost = 100;
+				power = 1;
+				pendingPower = 0;
+				mult = false;
+				shop = false;
+				purchasedGen = 0;
+				document.cookie = "gam=;";
+			}
+		}
 		let x = setInterval(update, 20)
 		document.getElementById("generate").onclick = click;
 		document.getElementById("keyb").onclick = buyKeyb;
@@ -172,6 +192,7 @@
 		document.getElementById("powerb").onclick = empower;
 		document.getElementById("unlock").onclick = unlock;
 		document.getElementById("mult").onclick = addMult;
+		document.getElementById("clear").onclick = delSave;
 		if (document.cookie.includes("gam")) {
 			let s = document.cookie;
 			let c = s.substr(4, s.length - 1);

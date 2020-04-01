@@ -140,7 +140,7 @@
 			purchasedGen++;
 			bits -= genCost;
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + generation + ")";
-			genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() * (totBits / Math.pow(10, power)) + 1))));
+			genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() * ((genCost * Math.log(totBits + 1)) / Math.pow(10, power) + Math.sqrt(1))))));
 			document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
 		}
 		function buyRecurb() {
@@ -149,7 +149,7 @@
 			}
 			recursor += 1;
 			bits -= recurCost;
-			recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() * (totBits / Math.pow(10, power)) + 1))));
+			recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() * ((recurCost * Math.log(totBits + 1)) / Math.pow(10, power) + Math.sqrt(1))))));
 			document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
 			document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";
 		}

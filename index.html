@@ -143,7 +143,7 @@
 			if (mult)
 				genAdd *= recursor;
 			if (regulus > 0) {
-				genAdd *= Math.exp(regulus);
+				genAdd *= Math.exp(4 + regulus);
 			}
 			if (bitMult)
 				genAdd *= Math.pow(2, Math.log(totBits)) == -Infinity ? 1 : Math.pow(1.2, Math.log(totBits));

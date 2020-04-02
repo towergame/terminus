@@ -56,9 +56,12 @@
 						18 Entropic Power</button>
 					<button id="scalePow" class="shopItem">Increase the effect Entropic Power has on scaling.<br />
 						30 Entropic Power</button>
+					<button id="bitMult" class="shopItem">Production multiplier based on total Entropy Bits
+						generated(xNaN).<br />
+						30 Entropic Power</button>
 					<br />
 					<button id="initio" class="shopItem">Initio Regulus.<br />
-						50 Entropic Power</button>
+						40 Entropic Power</button>
 				</div>
 			</div>
 			<div id="regulus" hidden>
@@ -91,7 +94,8 @@
 			scalePow;
 			initio;
 			regulus;
-			constructor(bit, totbit, gen, genc, rec, recc, pow, ppow, mult, shop, purchasedGen, exMult, entPow, scalePow, initio, regulus) {
+			bitMult;
+			constructor(bit, totbit, gen, genc, rec, recc, pow, ppow, mult, shop, purchasedGen, exMult, entPow, scalePow, initio, regulus, bitMult) {
 				this.bits = bit;
 				this.totBits = totbit;
 				this.generation = gen;
@@ -108,6 +112,7 @@
 				this.scalePow = scalePow;
 				this.initio = initio;
 				this.regulus = regulus;
+				this.bitMult = bitMult;
 			}
 		}
 		let bits = 0;
@@ -126,12 +131,13 @@
 		let scalePow = false;
 		let initio = false;
 		let regulus = 0;
+		let bitMult = false;
 		function click() {
 			bits++;
 			totBits++;
 		}
 		function update() {
-			let x = new Game(bits, totBits, generation, genCost, recursor, recurCost, power, pendingPower, mult, shop, purchasedGen, exMult, entPow, scalePow, initio, regulus);
+			let x = new Game(bits, totBits, generation, genCost, recursor, recurCost, power, pendingPower, mult, shop, purchasedGen, exMult, entPow, scalePow, initio, regulus, bitMult);
 			document.cookie = "gam=" + JSON.stringify(x) + ";";
 			let genAdd = 0.05 * recursor;
 			if (mult)
@@ -139,6 +145,8 @@
 			if (regulus > 0) {
 				genAdd *= Math.exp(regulus);
 			}
+			if (bitMult)
+				genAdd *= Math.pow(2, Math.log(totBits)) == -Infinity ? 1 : Math.pow(1.2, Math.log(totBits));
 			generation += genAdd;
 			let loge = 1;
 			let add = generation * 0.05;
@@ -148,6 +156,8 @@
 				if (Math.log(generation) != -Infinity)
 					add *= Math.log(generation) + 1;
 			}
+			if (bitMult)
+				add *= Math.pow(2, Math.log(totBits)) == -Infinity ? 1 : Math.pow(1.2, Math.log(totBits));
 			if (entPow)
 				add *= Math.exp(Math.sqrt(power + 4));
 			bits += add;
@@ -167,9 +177,10 @@
 			}
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
 			document.getElementById("pow").innerHTML = "You currently have " + (power - 1) + " Entropic Power.";
-			document.getElementById("mult").innerHTML = "Production multiplier based on purchased Generators(x" + purchasedGen + "& x" + recursor + ").<br /> 10 Entropic Power";
+			document.getElementById("mult").innerHTML = "Production multiplier based on purchased Generators(x" + purchasedGen + " & x" + recursor + ").<br /> 10 Entropic Power";
 			document.getElementById("exMult").innerHTML = "Production multiplier based on total Entropy Generators(x" + (Math.log(generation) + 1).toFixed(1) + ").<br /> 15 Entropic Power";
 			document.getElementById("entPow").innerHTML = "Production multiplier based on Entropic Power(x" + Math.exp(Math.sqrt(power)).toExponential(2) + ").<br /> 18 Entropic Power";
+			document.getElementById("bitMult").innerHTML = "Production multiplier based on total Entropy Bits generated(x" + Math.pow(1.5, Math.log(totBits)).toExponential(2) + ").<br />30 Entropic Power";
 		}
 		function buyKeyb() {
 			if (bits < genCost) {
@@ -283,13 +294,21 @@
 			document.getElementById("scalePow").disabled = true;
 		}
 		function initioReg() {
-			if (power - 1 < 50) {
+			if (power - 1 < 40) {
 				return;
 			}
-			power -= 50;
+			power -= 40;
 			initio = true;
 			document.getElementById("initio").disabled = true;
 			document.getElementById("regulusTab").hidden = false;
+		}
+		function bitMultt() {
+			if (power - 1 < 30) {
+				return;
+			}
+			power -= 30;
+			bitMult = true;
+			document.getElementById("bitMult").disabled = true;
 		}
 		function shopTab() {
 			document.getElementById("regulus").hidden = true;
@@ -304,7 +323,7 @@
 			document.getElementById("regulusTab").disabled = true;
 		}
 		function reg() {
-			if (power - 1 < Math.exp(5 + regulus)) {
+			if (power - 1 < Math.exp(4 + regulus)) {
 				return;
 			}
 			regulus++;
@@ -322,6 +341,7 @@
 			purchasedGen = 0;
 			entPow = false;
 			scalePow = false;
+			bitMult = false;
 			document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
 			document.getElementById("num").innerHTML = Math.floor(bits);
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
@@ -335,7 +355,7 @@
 			document.getElementById("exMult").disabled = false;
 			document.getElementById("entPow").disabled = false;
 			document.getElementById("scalePow").disabled = false;
-			let regPrice = Math.exp(5 + regulus);
+			let regPrice = Math.exp(4 + regulus);
 			document.getElementById("form").innerHTML = "Form a Regulus. <br />" + Math.round(regPrice) + " Entropic Power";
 			document.getElementById("reg").innerHTML = ""
 		}
@@ -358,6 +378,7 @@
 				scalePow = false;
 				initio = false;
 				regulus = 0;
+				bitMult = false;
 				document.cookie = "gam=;";
 				document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
 				document.getElementById("num").innerHTML = Math.floor(bits);
@@ -394,6 +415,7 @@
 		document.getElementById("initio").onclick = initioReg;
 		document.getElementById("shopTab").onclick = shopTab;
 		document.getElementById("regulusTab").onclick = regTab;
+		document.getElementById("bitMult").onclick = bitMultt;
 		document.getElementById("form").onclick = reg;
 		if (document.cookie.includes("gam")) {
 			let s = document.cookie;
@@ -415,6 +437,7 @@
 			scalePow = y.scalePow;
 			initio = y.initio;
 			regulus = y.regulus == NaN || y.regulus == null ? 0 : y.regulus;
+			bitMult = y.bitMult;
 			document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
 			document.getElementById("num").innerHTML = Math.floor(bits);
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
@@ -438,6 +461,9 @@
 			}
 			if (scalePow) {
 				document.getElementById("scalePow").disabled = true;
+			}
+			if (bitMult) {
+				document.getElementById("bitMult").disabled = true;
 			}
 			if (initio) {
 				document.getElementById("initio").disabled = true;

@@ -201,9 +201,9 @@
 			if (regulus > 0) {
 				if (scalePow) {
 					let rem = purchasedGen - power > 0 ? power : purchasedGen;
-					genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() / regulus * (genCost * Math.exp(Math.sqrt(purchasedGen - rem)) / Math.exp(power * power + 2) + Math.sqrt(1))))));
+					genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() / Math.exp(regulus) * (genCost * Math.exp(Math.sqrt(purchasedGen - rem)) / Math.exp(power * power + 2) + Math.sqrt(1))))));
 				} else {
-					genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() / regulus * (genCost * Math.exp(Math.sqrt(purchasedGen)) / Math.exp(power + 2) + Math.sqrt(1))))));
+					genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() / Math.exp(regulus) * (genCost * Math.exp(Math.sqrt(purchasedGen)) / Math.exp(power + 2) + Math.sqrt(1))))));
 				}
 				document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
 				return;
@@ -225,9 +225,9 @@
 			if (regulus > 0) {
 				if (scalePow) {
 					let rem = recursor - power > 0 ? power : recursor;
-					recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() / regulus * (recurCost * Math.exp(Math.sqrt(recursor - rem)) / Math.exp(power * power + 2) + Math.sqrt(1))))));
+					recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() / Math.exp(regulus) * (recurCost * Math.exp(Math.sqrt(recursor - rem)) / Math.exp(power * power + 2) + Math.sqrt(1))))));
 				} else {
-					recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() / regulus * (recurCost * Math.exp(Math.sqrt(recursor)) / Math.exp(power + 2) + Math.sqrt(1))))));
+					recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() / Math.exp(regulus) * (recurCost * Math.exp(Math.sqrt(recursor)) / Math.exp(power + 2) + Math.sqrt(1))))));
 				}
 				document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
 				document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";

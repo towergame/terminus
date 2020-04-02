@@ -149,10 +149,10 @@
 					add *= Math.log(generation) + 1;
 			}
 			if (entPow)
-				add *= Math.exp(Math.sqrt(power));
+				add *= Math.exp(Math.sqrt(power + 4));
 			bits += add;
 			totBits += add;
-			pendingPower = Math.log(totBits / Math.exp(power + 6));
+			pendingPower = Math.log(totBits / Math.exp(power));
 			if (pendingPower < 0)
 				pendingPower = 0;
 			document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
@@ -179,11 +179,21 @@
 			purchasedGen++;
 			bits -= genCost;
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + generation + ")";
+			if (regulus > 0) {
+				if (scalePow) {
+					let rem = purchasedGen - power > 0 ? power : purchasedGen;
+					genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() / regulus * (genCost * Math.exp(Math.sqrt(purchasedGen - rem)) / Math.exp(power * power + 2) + Math.sqrt(1))))));
+				} else {
+					genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() / regulus * (genCost * Math.exp(Math.sqrt(purchasedGen)) / Math.exp(power + 2) + Math.sqrt(1))))));
+				}
+				document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
+				return;
+			}
 			if (scalePow) {
-				let rem = bits - power * power > 0 ? power : bits;
-				genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() * ((genCost * Math.log(totBits - rem + 1)) / Math.exp(power + 2) + Math.sqrt(1))))));
+				let rem = purchasedGen - power > 0 ? power : purchasedGen;
+				genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() * (genCost * Math.exp(Math.sqrt(purchasedGen - rem)) / Math.exp(power * power + 2) + Math.sqrt(1))))));
 			} else {
-				genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() * ((genCost * Math.log(totBits + 1)) / Math.exp(power + 2) + Math.sqrt(1))))));
+				genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() * (genCost * Math.exp(Math.sqrt(purchasedGen)) / Math.exp(power + 2) + Math.sqrt(1))))));
 			}
 			document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
 		}
@@ -193,11 +203,22 @@
 			}
 			recursor += 1;
 			bits -= recurCost;
+			if (regulus > 0) {
+				if (scalePow) {
+					let rem = recursor - power > 0 ? power : recursor;
+					recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() / regulus * (recurCost * Math.exp(Math.sqrt(recursor - rem)) / Math.exp(power * power + 2) + Math.sqrt(1))))));
+				} else {
+					recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() / regulus * (recurCost * Math.exp(Math.sqrt(recursor)) / Math.exp(power + 2) + Math.sqrt(1))))));
+				}
+				document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
+				document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";
+				return;
+			}
 			if (scalePow) {
-				let rem = bits - power * power > 0 ? power : bits;
-				recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() * ((recurCost * Math.log(totBits - rem + 1)) / Math.exp(power + 2) + Math.sqrt(1))))));
+				let rem = recursor - power > 0 ? power : recursor;
+				recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() * (recurCost * Math.exp(Math.sqrt(recursor - rem)) / Math.exp(power * power + 2) + Math.sqrt(1))))));
 			} else {
-				recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() * ((recurCost * Math.log(totBits + 1)) / Math.exp(power + 2) + Math.sqrt(1))))));
+				recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() * (recurCost * Math.exp(Math.sqrt(recursor)) / Math.exp(power + 2) + Math.sqrt(1))))));
 			}
 			document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
 			document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";

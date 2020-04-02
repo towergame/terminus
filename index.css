@@ -159,6 +159,58 @@ body {
 	color: white;
 	box-shadow: black 0 0 10px;
 }
+#unlock {
+	background-color: black;
+	border: black 4px;
+	color: white;
+	box-shadow: black 0 0 10px;
+	height: 8vh;
+	width: 12%;
+	margin: 10pt;
+}
+#tabselect {
+	margin-bottom: 0pt;
+}
+.tab:disabled {
+	background-color: white;
+	border: solid white 4px;
+	color: black;
+	box-shadow: white 0 0 10px;
+}
+.tab {
+	background-color: lightgray;
+	border: solid lightgray 4px;
+	color: black;
+	box-shadow: lightgray 0 0 10px;
+}
+#shop {
+	border-top: solid white 1px;
+	border-bottom: solid white 1px;
+}
+#regulus {
+	border-top: solid white 1px;
+	border-bottom: solid white 1px;
+}
+@keyframes anim2 {
+	0% {
+		color: #00DDFF;
+	}
+	50% {
+		color: #FF00DD;
+	}
+	100% {
+		color: #00DDFF;
+	}
+}
+#form {
+	height: 8vh;
+	width: 12%;
+	margin: 10pt;
+	animation: anim2 10s infinite;
+	background: radial-gradient(#003200, black);
+	border: black 4px;
+	box-shadow: black 0 0 10px;
+}
 .shopItem {
 	background-color: white;
 	border: solid white 4px;
@@ -176,9 +228,6 @@ body {
 	box-shadow: white 0 0 10px;
 	height: 8vh;
 	width: 12%;
-}
-#unlocked div {
-	height: 10%;
 }
 .up {
     position: absolute;

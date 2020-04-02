@@ -175,7 +175,11 @@
 				document.getElementById("form").innerHTML = "Form a Regulus. <br />" + Math.round(regPrice) + " Entropic Power";
 				document.getElementById("reg").innerHTML = "You currently have <span id=\"regsp\">" + regulus + "</span> Regulus."
 			}
-			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
+			if (generation / 100000 > 1) {
+				document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation).toExponential(2) + ")";
+			} else {
+				document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
+			}
 			document.getElementById("pow").innerHTML = "You currently have " + (power - 1) + " Entropic Power.";
 			document.getElementById("mult").innerHTML = "Production multiplier based on purchased Generators(x" + purchasedGen + " & x" + recursor + ").<br /> 10 Entropic Power";
 			document.getElementById("exMult").innerHTML = "Production multiplier based on total Entropy Generators(x" + (Math.log(generation) + 1).toFixed(1) + ").<br /> 15 Entropic Power";
@@ -189,7 +193,11 @@
 			generation += 1;
 			purchasedGen++;
 			bits -= genCost;
-			document.getElementById("keybd").innerHTML = "Entropy Generator(" + generation + ")";
+			if (generation / 100000 > 1) {
+				document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation).toExponential(2) + ")";
+			} else {
+				document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
+			}
 			if (regulus > 0) {
 				if (scalePow) {
 					let rem = purchasedGen - power > 0 ? power : purchasedGen;

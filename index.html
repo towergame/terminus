@@ -393,7 +393,7 @@
 			entPow = y.entPow;
 			scalePow = y.scalePow;
 			initio = y.initio;
-			regulus = y.regulus == NaN ? 0 : y.regulus;
+			regulus = y.regulus == NaN || y.regulus == null ? 0 : y.regulus;
 			document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
 			document.getElementById("num").innerHTML = Math.floor(bits);
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";

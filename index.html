@@ -186,6 +186,20 @@
 			document.getElementById("entPow").innerHTML = "Production multiplier based on Entropic Power(x" + Math.exp(Math.sqrt(power)).toExponential(2) + ").<br /> 18 Entropic Power";
 			document.getElementById("bitMult").innerHTML = "Production multiplier based on total Entropy Bits generated(x" + Math.pow(1.5, Math.log(totBits)).toExponential(2) + ").<br />30 Entropic Power";
 		}
+		function increaseCost(x, y) {
+			if (regulus > 0) {
+				if (scalePow) {
+					return Math.log(x) + Math.log(2) * Math.pow(x, x * Math.random() * Math.log(y + 1) / Math.exp(Math.cbrt(power * power / 2) + 2) / Math.sqrt(regulus + 1) + 1);
+				} else {
+					return Math.log(x) + Math.log(2) * Math.pow(x, x * Math.random() * Math.log(y + 1) / Math.exp(Math.cbrt(power) + 2) / Math.sqrt(regulus + 1) + 1);
+				}
+			}
+			if (scalePow) {
+				return Math.log(x) + Math.log(2) * Math.pow(x, x * Math.random() * Math.log(y + 1) / Math.exp(Math.cbrt(power * power / 2) + 2) + 1);
+			} else {
+				return Math.log(x) + Math.log(2) * Math.pow(x, (x * Math.random() * Math.log(y + 1)) / Math.exp(Math.cbrt(power) + 2) + 1);
+			}
+		}
 		function buyKeyb() {
 			if (bits < genCost) {
 				return;
@@ -198,22 +212,7 @@
 			} else {
 				document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
 			}
-			if (regulus > 0) {
-				if (scalePow) {
-					let rem = purchasedGen - power > 0 ? power : purchasedGen;
-					genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() / Math.exp(regulus) * (genCost * Math.exp(Math.sqrt(purchasedGen - rem)) / Math.exp(power * power + 2) + Math.sqrt(1))))));
-				} else {
-					genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() / Math.exp(regulus) * (genCost * Math.exp(Math.sqrt(purchasedGen)) / Math.exp(power + 2) + Math.sqrt(1))))));
-				}
-				document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
-				return;
-			}
-			if (scalePow) {
-				let rem = purchasedGen - power > 0 ? power : purchasedGen;
-				genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() * (genCost * Math.exp(Math.sqrt(purchasedGen - rem)) / Math.exp(power * power + 2) + Math.sqrt(1))))));
-			} else {
-				genCost += Math.log(genCost * Math.pow(2, Math.pow(genCost, (Math.random() * (genCost * Math.exp(Math.sqrt(purchasedGen)) / Math.exp(power + 2) + Math.sqrt(1))))));
-			}
+			genCost += increaseCost(genCost, purchasedGen);
 			document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
 		}
 		function buyRecurb() {
@@ -222,23 +221,7 @@
 			}
 			recursor += 1;
 			bits -= recurCost;
-			if (regulus > 0) {
-				if (scalePow) {
-					let rem = recursor - power > 0 ? power : recursor;
-					recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() / Math.exp(regulus) * (recurCost * Math.exp(Math.sqrt(recursor - rem)) / Math.exp(power * power + 2) + Math.sqrt(1))))));
-				} else {
-					recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() / Math.exp(regulus) * (recurCost * Math.exp(Math.sqrt(recursor)) / Math.exp(power + 2) + Math.sqrt(1))))));
-				}
-				document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
-				document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";
-				return;
-			}
-			if (scalePow) {
-				let rem = recursor - power > 0 ? power : recursor;
-				recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() * (recurCost * Math.exp(Math.sqrt(recursor - rem)) / Math.exp(power * power + 2) + Math.sqrt(1))))));
-			} else {
-				recurCost += Math.log(recurCost * Math.pow(2, Math.pow(recurCost, (Math.random() * (recurCost * Math.exp(Math.sqrt(recursor)) / Math.exp(power + 2) + Math.sqrt(1))))));
-			}
+			recurCost += increaseCost(recurCost, recursor);
 			document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
 			document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";
 		}
@@ -363,6 +346,7 @@
 			document.getElementById("exMult").disabled = false;
 			document.getElementById("entPow").disabled = false;
 			document.getElementById("scalePow").disabled = false;
+			document.getElementById("bitMult").disabled = false;
 			let regPrice = Math.exp(4 + regulus);
 			document.getElementById("form").innerHTML = "Form a Regulus. <br />" + Math.round(regPrice) + " Entropic Power";
 			document.getElementById("reg").innerHTML = ""

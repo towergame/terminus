@@ -344,7 +344,11 @@
 			document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
 			document.getElementById("num").innerHTML = Math.floor(bits);
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
-			document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
+			if (recurCost / 100000 > 1) {
+				document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost).toExponential(2) + " bits)";
+			} else {
+				document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
+			}
 			document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";
 			document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + generation + ")";
@@ -441,9 +445,17 @@
 			document.getElementById("pendPowNum").innerHTML = Math.floor(pendingPower);
 			document.getElementById("num").innerHTML = Math.floor(bits);
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
-			document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
+			if (recurCost / 100000 > 1) {
+				document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost).toExponential(2) + " bits)";
+			} else {
+				document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
+			}
 			document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";
-			document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
+			if (genCost / 100000 > 1) {
+				document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost).toExponential(2) + " bits)";
+			} else {
+				document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
+			}
 			document.getElementById("keybd").innerHTML = "Entropy Generator(" + generation + ")";
 			document.getElementById("shopTab").disabled = true;
 			if (shop) {

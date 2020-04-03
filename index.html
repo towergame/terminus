@@ -189,15 +189,15 @@
 		function increaseCost(x, y) {
 			if (regulus > 0) {
 				if (scalePow) {
-					return Math.log(x) + Math.log(2) * Math.pow(x, x * Math.random() * Math.log(y + 1) / Math.exp(Math.cbrt(power * power / 2) + 2) / Math.sqrt(regulus + 1) + 1);
+					return Math.log(x) + Math.log(2) * Math.pow(x, x * Math.random() * Math.log(y + 1) / Math.exp(Math.sqrt(power * 4) + 2) / Math.sqrt(regulus + 1) + 1);
 				} else {
-					return Math.log(x) + Math.log(2) * Math.pow(x, x * Math.random() * Math.log(y + 1) / Math.exp(Math.cbrt(power) + 2) / Math.sqrt(regulus + 1) + 1);
+					return Math.log(x) + Math.log(2) * Math.pow(x, x * Math.random() * Math.log(y + 1) / Math.exp(Math.sqrt(power) + 2) / Math.sqrt(regulus + 1) + 1);
 				}
 			}
 			if (scalePow) {
-				return Math.log(x) + Math.log(2) * Math.pow(x, x * Math.random() * Math.log(y + 1) / Math.exp(Math.cbrt(power * power / 2) + 2) + 1);
+				return Math.log(x) + Math.log(2) * Math.pow(x, x * Math.random() * Math.log(y + 1) / Math.exp(Math.sqrt(power * 4) + 2) + 1);
 			} else {
-				return Math.log(x) + Math.log(2) * Math.pow(x, (x * Math.random() * Math.log(y + 1)) / Math.exp(Math.cbrt(power) + 2) + 1);
+				return Math.log(x) + Math.log(2) * Math.pow(x, (x * Math.random() * Math.log(y + 1)) / Math.exp(Math.sqrt(power) + 2) + 1);
 			}
 		}
 		function buyKeyb() {

@@ -213,7 +213,11 @@
 				document.getElementById("keybd").innerHTML = "Entropy Generator(" + Math.floor(generation) + ")";
 			}
 			genCost += increaseCost(genCost, purchasedGen);
-			document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
+			if (genCost / 100000 > 1) {
+				document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost).toExponential(2) + " bits)";
+			} else {
+				document.getElementById("keyb").innerHTML = "Generate (" + Math.round(genCost) + " bits)";
+			}
 		}
 		function buyRecurb() {
 			if (bits < recurCost) {
@@ -222,7 +226,11 @@
 			recursor += 1;
 			bits -= recurCost;
 			recurCost += increaseCost(recurCost, recursor);
-			document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
+			if (recurCost / 100000 > 1) {
+				document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost).toExponential(2) + " bits)";
+			} else {
+				document.getElementById("recurb").innerHTML = "Generate (" + Math.round(recurCost) + " bits)";
+			}
 			document.getElementById("recurd").innerHTML = "Recursive Generator(" + recursor + ")";
 		}
 		function empower() {

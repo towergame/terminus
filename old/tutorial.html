@@ -15,19 +15,18 @@
 		some explanations of some mechanics in the game:<br />
 		Entropy Generator - generates bits of entropy<br />
 		Recursive Generator - generates Entropy Generators<br />
-		The cost scales with the formula of log(x * 2 ^ (x ^ (c * (x * log(y + 1) / e ^ z) + sqrt(1)))), where:<br />
+		The cost scales with the formula of x * (1 + c)<sup>y/p</sup>, where:<br />
 		x is the previous cost<br />
 		c is a random number from 0 to 1<br />
-		y is the total amount of bits produced in current run<br />
-		z is the amount of total entropic power + 1<br />
-		e is Euler's number<br />
+		p is the amount of total entropic power + 1<br />
+		y is the amount of purchased generators<br />
 		<br />
 		Don't worry if it jumps to infinity, because you'll be able to decrease the scaling of the cost by collecting
 		more and more Entropic Power.
 		<br />
 		<b>Entropic Power</b> is the currency(?) used to combat the immense scaling of the cost for the Generators.
 		However, the more Entropic Power you have, the harder it is to gain it.<br />
-		The formula for entropic power gain is log(x / e ^ (y + 2)), where:<br />
+		The formula for entropic power gain is log(x / e<sup>y + 2</sup>), where:<br />
 		x is bits generated this run<br />
 		y is entropic power you have<br />
 		e is Euler's number<br />
